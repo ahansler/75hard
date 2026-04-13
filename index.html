@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="75 HARD">
+<meta name="theme-color" content="#0D0D0D">
+<title>75 HARD</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0D0D0D;--surface:#1A1A1A;--border:#2A2A2A;--text:#F5F0EB;
+--muted:#888;--dim:#666;--faint:#555;--ghost:#444;--void:#333;
+--him:#E07A5F;--her:#7B68AE;--success:#4ADE80;--warn:#D4A373;
+--accent2:#2D6A4F;--accent2p:#E8F5EE;
+--fd:'Bebas Neue',sans-serif;--fb:'DM Sans',sans-serif;
+--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;overflow-x:hidden}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;padding-top:var(--st)}
+button{font-family:inherit;cursor:pointer;-webkit-appearance:none}
+input{font-family:inherit;-webkit-appearance:none}
+.ctr{max-width:500px;margin:0 auto;padding:0 20px 120px}
+.hdr{padding:20px 20px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;max-width:500px;margin:0 auto}
+.hdr h1{font-family:var(--fd);font-size:28px;letter-spacing:4px;line-height:1}
+.hdr-sub{font-size:12px;color:var(--dim);margin-top:2px}
+
+/* Bottom Nav */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 calc(8px + var(--sb));z-index:100}
+.bnav button{background:none;border:none;color:var(--ghost);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;min-width:60px}
+.bnav button.act{color:var(--him)}
+.bnav button span{font-size:20px}
+
+/* Person Toggle */
+.ptog{display:flex;border-radius:10px;overflow:hidden;border:1px solid var(--border);margin:12px 0}
+.pbtn{flex:1;padding:12px;border:none;font-size:13px;font-weight:500;background:var(--surface);color:var(--dim);transition:all .2s}
+.pbtn.ah{background:var(--him);color:white;font-weight:700}
+.pbtn.as{background:var(--her);color:white;font-weight:700}
+
+/* Sub tabs */
+.stabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.stab{padding:10px;border-radius:8px;border:none;font-size:12px;font-weight:500;background:transparent;color:var(--dim);transition:all .2s;white-space:nowrap}
+.stab.act{background:var(--border);color:var(--text);font-weight:700}
+
+.card{background:var(--surface);border-radius:14px;padding:20px;border:1px solid var(--border);margin-bottom:12px}
+.clbl{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px}
+
+/* Stats Banner */
+.sban{background:var(--surface);border-radius:14px;padding:20px;border:1px solid var(--border);display:flex;justify-content:space-around;text-align:center;margin-bottom:16px}
+.snum{font-family:var(--fd);font-size:36px}
+.slbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px}
+.sdiv{width:1px;background:var(--border)}
+
+/* Tasks */
+.tbtn{width:100%;display:flex;align-items:center;gap:14px;padding:16px;margin-bottom:8px;border-radius:12px;border:1px solid var(--border);background:var(--surface);text-align:left;transition:all .15s}
+.tbox{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--border);transition:all .15s}
+.ttl{font-size:14px;font-weight:700;transition:color .15s}
+.tdsc{font-size:11px;color:var(--dim);margin-top:2px}
+
+/* Progress */
+.ptrk{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.pfil{height:100%;border-radius:4px;transition:width .5s ease}
+
+/* Calendar */
+.cgrd{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px}
+.chdr{text-align:center;font-size:10px;color:var(--faint);padding:4px 0;font-weight:700}
+.cday{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;transition:all .15s;border:1px solid var(--surface)}
+
+/* Compare */
+.cmpr{display:flex;gap:8px;margin-bottom:16px}
+.cmprc{flex:1;text-align:center}
+.mstats{display:flex;justify-content:space-between;margin-top:12px}
+.msnum{font-family:var(--fd);font-size:22px;color:var(--text)}
+.mslbl{font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:1px}
+.btrk{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.bfil{height:100%;border-radius:3px;transition:width .5s}
+
+.bdr{margin-bottom:12px}
+.bdhdr{display:flex;justify-content:space-between;margin-bottom:4px}
+.bdlbl{font-size:12px;color:var(--muted)}
+.bdpct{font-size:12px;color:var(--muted);font-weight:700}
+.bdtrk{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.bdfil{height:100%;border-radius:2px;transition:width .5s}
+
+.mils{display:flex;flex-wrap:wrap;gap:8px}
+.mil{padding:8px 14px;border-radius:10px;font-size:13px;font-weight:700;border:1px solid var(--border);background:var(--bg);color:var(--ghost)}
+
+.setup-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.setup-box{max-width:400px;width:100%;text-align:center}
+.stitle{font-family:var(--fd);font-size:48px;letter-spacing:6px;margin-bottom:8px}
+.ssub{font-size:14px;color:var(--muted);margin-bottom:40px;line-height:1.6}
+.scard{background:var(--surface);border-radius:16px;padding:32px 24px;border:1px solid var(--border)}
+.sinp{width:100%;padding:14px;border-radius:10px;border:1px solid var(--void);background:var(--bg);color:var(--text);font-size:16px;margin-bottom:20px;outline:none}
+.sbtn{width:100%;padding:16px;border-radius:10px;border:none;font-size:14px;font-weight:700;font-family:var(--fd);letter-spacing:3px;background:var(--him);color:white;cursor:pointer}
+.rbtn{width:100%;padding:14px;border-radius:10px;border:1px solid var(--void);background:transparent;color:var(--faint);font-size:12px;margin-top:8px}
+.sftr{margin-top:32px;font-size:12px;color:var(--faint);line-height:1.6}
+.dcbdg{font-size:12px;font-weight:700;color:var(--success);background:rgba(74,222,128,0.1);padding:6px 14px;border-radius:20px}
+.bbtn{padding:6px 14px;border-radius:8px;border:1px solid var(--void);background:transparent;color:var(--muted);font-size:12px}
+.dhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.dttl{font-family:var(--fd);font-size:22px;letter-spacing:2px}
+.dsub{font-size:12px;color:var(--dim)}
+
+.lds{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.ldst{font-family:var(--fd);font-size:24px;letter-spacing:4px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.puls{animation:pulse 1.5s infinite}
+
+/* Meal plan specific */
+.tgt-row{display:flex;align-items:center;padding:12px 16px;background:var(--surface);border-radius:10px;border:1px solid var(--border);margin-bottom:8px}
+.tgt-icon{font-size:20px;margin-right:12px;width:28px;text-align:center}
+.tgt-info{flex:1}
+.tgt-grp{font-weight:700;font-size:13px}
+.tgt-note{font-size:11px;color:var(--dim)}
+.tgt-val{font-weight:700;font-size:12px;padding:2px 8px;border-radius:6px}
+
+.meal-card{background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:10px}
+.meal-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-bottom:4px}
+.meal-name{font-size:14px;font-weight:700;margin-bottom:6px}
+.meal-cals{display:flex;gap:10px;margin-bottom:6px;font-size:12px}
+.meal-her{font-size:11px;color:var(--her);background:rgba(123,104,174,0.12);padding:5px 10px;border-radius:8px;line-height:1.3}
+.meal-prep{font-size:11px;color:var(--dim);margin-top:6px}
+
+.recipe-card{background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:10px;cursor:pointer}
+.r-tags{margin-bottom:6px}
+.r-tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600;color:var(--accent2);background:rgba(45,106,79,0.15);margin-right:4px;margin-bottom:4px}
+.r-meta{font-size:11px;color:var(--dim)}
+.r-cals{display:flex;gap:10px;margin-top:4px;font-size:11px}
+.r-expand{margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.r-portion{font-size:11px;color:var(--her);background:rgba(123,104,174,0.12);padding:8px 10px;border-radius:8px;margin-bottom:12px;line-height:1.3}
+.r-ing{font-size:12px;padding:3px 0 3px 10px;border-left:2px solid var(--accent2);margin-bottom:4px;line-height:1.4}
+.r-step{display:flex;gap:8px;margin-bottom:8px;font-size:12px;line-height:1.5}
+.r-snum{font-weight:700;color:var(--accent2);min-width:18px}
+
+.prep-card{background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:16px;margin-bottom:10px}
+.prep-who{font-size:11px;color:var(--her);background:rgba(123,104,174,0.12);padding:5px 10px;border-radius:8px;margin-top:8px;line-height:1.3}
+.prep-time{font-size:11px;font-weight:700;color:var(--accent2);background:rgba(45,106,79,0.1);padding:3px 10px;border-radius:12px;white-space:nowrap}
+
+.snack-card{background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.snack-name{font-size:13px;font-weight:700;margin-bottom:3px}
+.snack-dash{font-size:11px;color:var(--dim)}
+.snack-cal{font-family:var(--fd);font-size:22px;color:var(--her)}
+.snack-unit{font-size:10px;color:var(--dim)}
+
+.tip-card{background:rgba(212,163,115,0.1);border:1px solid rgba(212,163,115,0.3);border-radius:12px;padding:16px;margin-bottom:12px}
+.tip-title{font-size:13px;font-weight:700;color:var(--warn);margin-bottom:6px}
+.tip-text{font-size:12px;color:var(--text);line-height:1.6}
+
+.filter-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px}
+.fbtn{padding:5px 12px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--dim);font-size:11px;font-weight:600;white-space:nowrap}
+.fbtn.act{background:var(--accent2);color:white;border-color:var(--accent2)}
+
+.day-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px}
+.dbtn{padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--dim);font-size:11px;font-weight:500;white-space:nowrap}
+.dbtn.act{border-color:var(--accent2);background:rgba(45,106,79,0.15);color:var(--accent2);font-weight:700}
+
+.section-title{font-family:var(--fd);font-size:18px;letter-spacing:1px;margin:16px 0 12px}
+
+.grocery-section{font-size:12px;color:var(--text);line-height:1.8}
+.grocery-section strong{color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="app"><div class="lds"><div class="ldst puls">75 HARD</div><div style="font-size:12px;color:var(--dim)">Connecting...</div></div></div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getDatabase,ref,set,onValue}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const fbApp=initializeApp({
+  apiKey:"AIzaSyDjs-fWjGVYIIMI_mU-oRxPJk33Oiku1OI",
+  authDomain:"hard-36013.firebaseapp.com",
+  databaseURL:"https://hard-36013-default-rtdb.firebaseio.com",
+  projectId:"hard-36013",
+  storageBucket:"hard-36013.firebasestorage.app",
+  messagingSenderId:"491800711197",
+  appId:"1:491800711197:web:de591fb86b7eede833b6f4"
+});
+const db=getDatabase(fbApp),dataRef=ref(db,"75hard");
+
+const TASKS=[
+{key:"diet",icon:"🍽",label:"Diet",desc:"Follow DASH plan, no cheats"},
+{key:"workout1",icon:"🏋️",label:"Workout 1",desc:"45 min training session"},
+{key:"workout2",icon:"🚶",label:"Workout 2 (outdoor)",desc:"45 min, must be outside"},
+{key:"water",icon:"💧",label:"1 Gallon Water",desc:"128 oz throughout the day"},
+{key:"reading",icon:"📖",label:"Read 10 Pages",desc:"Nonfiction, no audiobooks"},
+{key:"photo",icon:"📸",label:"Progress Photo",desc:"Same spot, same time daily"}
+];
+const MS=[1,7,14,21,30,45,60,75];
+
+const TARGETS_HIM=[
+{g:"Grains",s:"8–10",i:"🌾",n:"more on run days"},{g:"Vegetables",s:"4–5",i:"🥦",n:"variety of colors"},
+{g:"Fruits",s:"4–5",i:"🍎",n:"whole fruit"},{g:"Dairy",s:"2–3",i:"🥛",n:"fat-free or low-fat"},
+{g:"Meat/Fish",s:"6 or less",i:"🍗",n:"prioritize post-lift"},{g:"Fats & Oils",s:"2–3",i:"🫒",n:"healthy fats"},
+{g:"Nuts/Legumes",s:"1/day",i:"🥜",n:"daily"},{g:"Sweets",s:"≤5/wk",i:"🍯",n:"minimal"},
+{g:"Sodium",s:"≤2,300mg",i:"🧂",n:"1,500mg even better"}
+];
+const TARGETS_HER=[
+{g:"Grains",s:"6",i:"🌾",n:"mostly whole grains"},{g:"Vegetables",s:"3–4",i:"🥦",n:"variety of colors"},
+{g:"Fruits",s:"4",i:"🍎",n:"whole fruit"},{g:"Dairy",s:"2–3",i:"🥛",n:"fat-free or low-fat"},
+{g:"Meat/Fish",s:"3–4",i:"🍗",n:"1 oz cooked = 1 serving"},{g:"Fats & Oils",s:"2",i:"🫒",n:"healthy fats"},
+{g:"Nuts/Legumes",s:"3–4/wk",i:"🥜",n:"weekly"},{g:"Sweets",s:"≤3/wk",i:"🍯",n:"minimal"},
+{g:"Sodium",s:"≤2,300mg",i:"🧂",n:"1,500mg even better"}
+];
+
+const WEEK=[
+{day:"Monday",meals:{breakfast:{n:"Overnight Oats + Banana",h:440,s:300,sn:"⅓ cup oats, skip banana",p:"5 min"},lunch:{n:"Mediterranean Chicken Bowl",h:550,s:410,sn:"¾ cup rice, 4 oz chicken",p:"10 min"},dinner:{n:"Lemon Herb Salmon + Roasted Veggies",h:620,s:480,sn:"4 oz salmon, ¾ cup rice",p:"30 min"},snacks:{n:"Pre-run banana + yogurt; almonds",h:420,s:210,sn:"Apple + Greek yogurt only",p:"2 min"}}},
+{day:"Tuesday",meals:{breakfast:{n:"Veggie Egg White Scramble + Toast",h:420,s:290,sn:"4 whites + 1 egg, 1 toast",p:"10 min"},lunch:{n:"Black Bean & Quinoa Bowl",h:530,s:400,sn:"¾ cup quinoa, half avocado",p:"10 min"},dinner:{n:"Turkey Meatballs + WW Pasta",h:600,s:440,sn:"3 meatballs, smaller pasta",p:"35 min"},snacks:{n:"Cottage cheese + fruit; trail mix",h:400,s:220,sn:"Banana + hummus & carrots",p:"3 min"}}},
+{day:"Wednesday",meals:{breakfast:{n:"Banana Spinach Smoothie + Toast",h:440,s:310,sn:"½ banana, 1 slice toast",p:"7 min"},lunch:{n:"Grilled Chicken Salad + Roll",h:530,s:380,sn:"4 oz chicken, 1 Tbsp dressing",p:"10 min"},dinner:{n:"Slow Cooker Chicken Curry + Rice",h:630,s:470,sn:"¾ cup rice, smaller portion",p:"15 min"},snacks:{n:"Toast + honey; orange + cheese",h:400,s:200,sn:"Orange + string cheese only",p:"2 min"}}},
+{day:"Thursday",meals:{breakfast:{n:"Overnight Oats with Berries",h:400,s:300,sn:"⅓ cup oats",p:"5 min"},lunch:{n:"Leftover Curry Wrap + Salad",h:530,s:390,sn:"Lettuce wrap, smaller portion",p:"5 min"},dinner:{n:"Baked Cod + Sweet Potato + Broccoli",h:580,s:430,sn:"Half sweet potato",p:"30 min"},snacks:{n:"Yogurt + granola; pear + PB",h:390,s:210,sn:"Yogurt + berries only",p:"3 min"}}},
+{day:"Friday",meals:{breakfast:{n:"Veggie Egg White Scramble + Toast",h:420,s:290,sn:"4 whites + 1 egg, 1 toast",p:"10 min"},lunch:{n:"Lentil Soup + Salad + Roll",h:520,s:380,sn:"1 cup soup, skip roll",p:"10 min"},dinner:{n:"Grilled Chicken Fajitas + Rice",h:620,s:440,sn:"Lettuce wraps, 4 oz chicken",p:"25 min"},snacks:{n:"Pre-run banana; cottage cheese",h:410,s:210,sn:"Pear + ½ cup cottage cheese",p:"2 min"}}},
+{day:"Saturday",meals:{breakfast:{n:"Sweet Potato Egg Hash + Toast",h:480,s:330,sn:"½ sweet potato, 2 whites + 1 egg",p:"15 min"},lunch:{n:"Mediterranean Chicken Bowl",h:570,s:410,sn:"¾ cup rice, 4 oz chicken",p:"10 min"},dinner:{n:"Herb Pork Tenderloin + Root Veggies",h:600,s:460,sn:"4 oz tenderloin",p:"40 min"},snacks:{n:"Banana + dates; yogurt + granola",h:450,s:200,sn:"Fruit bowl only",p:"3 min"}}},
+{day:"Sunday",meals:{breakfast:{n:"Banana Spinach Smoothie + Toast",h:390,s:310,sn:"½ banana, 1 toast",p:"7 min"},lunch:{n:"Black Bean & Quinoa Bowl",h:490,s:400,sn:"¾ cup quinoa, half avocado",p:"10 min"},dinner:{n:"Sheet Pan Chicken + Vegetables",h:530,s:440,sn:"1 thigh, extra veggies",p:"35 min"},snacks:{n:"Yogurt parfait; apple + almond butter",h:330,s:200,sn:"Smaller parfait, apple only",p:"3 min"}}}
+];
+
+const RECIPES=[
+{id:1,nm:"Overnight Oats with Berries",tm:"5 min prep",sv:2,tg:["Breakfast","Meal Prep"],ch:"400–440",cs:300,pn:"Her: ⅓ cup oats. Him: ½ cup + banana on run days.",
+ig:["Rolled oats (him ½ cup + her ⅓ cup)","1 cup fat-free milk","½ cup nonfat Greek yogurt","1 cup mixed berries","2 Tbsp chia seeds","1 tsp vanilla","1 tsp cinnamon","Optional: banana (him, run days)"],
+st:["Divide oats between jars — his ½ cup, hers ⅓ cup.","Add ½ cup milk, ¼ cup yogurt, 1 Tbsp chia, ½ tsp vanilla, ½ tsp cinnamon each.","Top with berries. He adds banana on run days.","Refrigerate overnight. Batch 4 jars Sunday."]},
+{id:2,nm:"Mediterranean Chicken Bowl",tm:"10 min",sv:2,tg:["Lunch","High Protein"],ch:"530–570",cs:410,pn:"Her: ¾ cup rice, 4 oz chicken. Him: 1+ cup rice, 5–6 oz.",
+ig:["Grilled chicken (him 5–6 oz + her 3–4 oz)","Brown rice (him 1+ cup + her ¾ cup)","2 cups mixed greens","1 cucumber, diced","1 cup cherry tomatoes","¼ cup Kalamata olives","2 Tbsp olive oil + 1 Tbsp lemon juice","2 Tbsp low-fat feta"],
+st:["Divide rice between bowls.","Layer greens, cucumber, tomatoes, olives.","Add chicken — weigh portions.","Whisk oil + lemon, drizzle. Top with feta."]},
+{id:3,nm:"Lemon Herb Salmon",tm:"25 min",sv:2,tg:["Dinner","Heart Healthy"],ch:"520–620",cs:480,pn:"Her: 4 oz fillet, ¾ cup rice. Him: 6 oz, 1 cup rice.",
+ig:["Salmon (him 6 oz + her 4 oz)","2 Tbsp lemon juice","1 Tbsp olive oil","2 cloves garlic","1 tsp dill + 1 tsp parsley","Black pepper","4 cups roasting vegetables","Brown rice"],
+st:["Preheat 400°F. Parchment-line sheet pan.","Toss veggies with ½ Tbsp oil.","Mix oil, lemon, garlic, herbs.","Place fillets, spoon herb mix over.","Bake 18–20 min. Serve with rice."]},
+{id:4,nm:"Black Bean & Quinoa Bowl",tm:"10 min",sv:2,tg:["Lunch","Plant Protein"],ch:"490–530",cs:400,pn:"Her: ¾ cup quinoa, ¼ avocado. Him: 1+ cup, ½ avocado.",
+ig:["Quinoa (him 1+ cup + her ¾ cup)","1 can black beans (no salt)","1 cup corn","1 avocado","1 cup cherry tomatoes","2 cups romaine","Lime, 1 Tbsp olive oil, 1 tsp cumin"],
+st:["Divide quinoa.","Top with beans, corn, tomatoes, romaine, avocado.","Whisk lime, oil, cumin. Drizzle.","Keeps 3 days without avocado."]},
+{id:5,nm:"Turkey Meatballs + WW Pasta",tm:"35 min",sv:4,tg:["Dinner","Meal Prep"],ch:"560–600",cs:440,pn:"Her: 3 meatballs + ¾ cup pasta. Him: 4–5 + 1+ cup.",
+ig:["1 lb lean turkey (93/7)","½ cup WW breadcrumbs","1 egg white","2 cloves garlic","1 tsp Italian seasoning","8 oz WW spaghetti","2 cups no-salt marinara","2 cups steamed broccoli"],
+st:["Preheat 400°F. Mix turkey, breadcrumbs, egg white, garlic, seasoning.","Form 16 meatballs, bake 18–20 min.","Cook pasta. Warm sauce.","Plate per portions. Serve with veggies.","Double batch on prep day — freezes great."]},
+{id:6,nm:"Slow Cooker Chicken Curry",tm:"15 min active",sv:4,tg:["Dinner","Meal Prep"],ch:"530–630",cs:470,pn:"Her: smaller portion + ¾ cup rice. Him: full + 1+ cup rice.",
+ig:["1.5 lbs chicken thighs","1 can light coconut milk","1 can no-salt diced tomatoes","1 onion, 3 garlic, 1 Tbsp ginger","2 Tbsp curry powder, 1 tsp turmeric","2 cups spinach","Brown rice"],
+st:["Place chicken in slow cooker.","Mix coconut milk, tomatoes, onion, garlic, ginger, spices.","Cook LOW 6–7 hr.","Shred chicken, stir in spinach.","Serve over rice. Great leftovers."]},
+{id:7,nm:"Lentil Soup",tm:"45 min",sv:6,tg:["Lunch","Meal Prep","Plant Protein"],ch:290,cs:240,pn:"Her: 1 cup. Him: 1.5 cups + roll on training days.",
+ig:["2 cups lentils","1 onion, 3 carrots, 3 celery","4 garlic cloves","1 can no-salt tomatoes","8 cups low-sodium broth","2 tsp cumin, 1 tsp paprika","2 cups spinach/kale","1 Tbsp olive oil, lemon"],
+st:["Sauté onion, carrots, celery 5 min.","Add garlic, spices 1 min.","Add lentils, tomatoes, broth. Simmer 30–35 min.","Stir in greens + lemon.","Freeze individual portions."]},
+{id:8,nm:"Veggie Egg White Scramble",tm:"10 min",sv:2,tg:["Breakfast","Quick"],ch:"360–420",cs:290,pn:"Her: 4 whites + 1 egg, 1 toast. Him: 6 whites + 2 eggs, 2 toast.",
+ig:["Egg whites: him 6 + her 4","Whole eggs: him 2 + her 1","Spinach, bell pepper, onion, mushrooms","Cooking spray","WW toast: him 2 + her 1","Optional: PB on toast (him, lift days)"],
+st:["Heat skillet with spray.","Sauté pepper, onion, mushrooms 3–4 min.","Add spinach 1 min.","Scramble portions separately.","Season. Serve with toast."]}
+];
+
+const SNACKS=[
+{n:"Apple slices (1 medium)",c:95,d:"1 fruit"},
+{n:"Greek yogurt (¾ cup) + berries",c:120,d:"1 dairy, ½ fruit"},
+{n:"Carrots & celery + 2 Tbsp hummus",c:100,d:"1 vegetable"},
+{n:"String cheese + clementine",c:130,d:"1 dairy, 1 fruit"},
+{n:"Cottage cheese + cucumber",c:105,d:"1 dairy, ½ veg"},
+{n:"Small banana",c:90,d:"1 fruit"},
+{n:"½ cup edamame (unsalted)",c:95,d:"1 legume"},
+{n:"Hard-boiled egg + tomatoes",c:110,d:"1 meat, ½ veg"}
+];
+
+const PREP=[
+{t:"Cook & Shred Chicken",d:"3 lbs breast, garlic/onion powder/pepper. Bake 400°F 22–25 min. Shred into containers.",tm:"30 min",w:"One seasons, the other preps pan"},
+{t:"Cook Grains in Bulk",d:"4 cups dry quinoa + 4 cups dry brown rice. Cook, cool, store. Lasts 5 days.",tm:"40 min",w:"One handles grains, other starts chicken"},
+{t:"Prep Overnight Oats",d:"4 jars — 2 with ½ cup oats (his), 2 with ⅓ cup (hers). Through Thursday.",tm:"10 min",w:"Assembly line — side by side"},
+{t:"Big Batch Lentil Soup",d:"6 servings. 2 in fridge, freeze 4 individual portions.",tm:"45 min",w:"One chops, the other measures"},
+{t:"Wash & Chop Vegetables",d:"Wash greens. Dice peppers, onions, cucumbers, carrots, sweet potatoes. Store with damp towels.",tm:"20 min",w:"Best task together — chopping & chatting"},
+{t:"Portion Snacks + Run Fuel",d:"His: nuts, bananas, yogurt portions, dates. Hers: fruit + dairy pairings. Cut carrot/celery sticks.",tm:"15 min",w:"One does his, other does hers"},
+{t:"Turkey Meatball Batch",d:"Double recipe (2 lbs). Bake 32, cool, freeze in bags of 4–5.",tm:"25 min",w:"One mixes + forms, other manages oven"}
+];
+
+function fmt(d){return d.toISOString().split("T")[0]}
+function td(){return fmt(new Date())}
+function aD(s,n){const d=new Date(s+"T12:00:00");d.setDate(d.getDate()+n);return fmt(d)}
+function dN(a,b){return Math.floor((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/864e5)+1}
+function sD(s){return new Date(s+"T12:00:00").toLocaleDateString("en-US",{weekday:"short"})}
+function sM(s){return new Date(s+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"})}
+function isD(d){return d&&TASKS.every(t=>d[t.key]===true)}
+
+let S={startDate:null,days:{}},P=localStorage.getItem("75h_p")||"him",V="tracker",SV="today",SD=null,MF="All",MD=0,ER=null,CON=false;
+
+onValue(dataRef,snap=>{const v=snap.val();S=v?{startDate:v.startDate||null,days:v.days||{}}:{startDate:null,days:{}};CON=true;R()},
+e=>{document.getElementById("app").innerHTML=`<div class="lds"><div class="ldst">ERROR</div><div style="font-size:12px;color:var(--dim);max-width:300px;text-align:center;line-height:1.6">${e.message}</div></div>`});
+
+function sv(){set(dataRef,S).catch(e=>console.error(e))}
+function gC(d,w){return S.days[d+"_"+w]||{}}
+window.tT=function(d,w,k){const x=d+"_"+w;if(!S.days[x])S.days[x]={};S.days[x][k]=!S.days[x][k];sv();R()};
+window.sP=function(p){P=p;localStorage.setItem("75h_p",p);R()};
+window.sV=function(v){V=v;SV="today";SD=null;R()};
+window.sSV=function(v){SV=v;SD=null;R()};
+window.sSD=function(d){SD=d;SV="today";R()};
+window.cSD=function(){SD=null;R()};
+window.sMF=function(f){MF=f;R()};
+window.sMD=function(d){MD=d;R()};
+window.sER=function(id){ER=ER===id?null:id;R()};
+window.cS=function(){const i=document.getElementById("startInput");if(i&&i.value){S.startDate=i.value;sv();R()}};
+window.rC=function(){if(confirm("Reset ALL progress?")){S={startDate:null,days:{}};sv();V="tracker";SV="today";SD=null;R()}};
+
+function cStr(w){if(!S.startDate)return 0;let s=0,d=td();if(dN(S.startDate,d)<1)return 0;if(!isD(gC(d,w)))d=aD(td(),-1);for(let i=0;i<75;i++){if(dN(S.startDate,d)<1)break;if(isD(gC(d,w))){s++;d=aD(d,-1)}else break}return s}
+function cTot(w){if(!S.startDate)return 0;let t=0;for(let i=0;i<75;i++)if(isD(gC(aD(S.startDate,i),w)))t++;return t}
+
+function R(){
+const el=document.getElementById("app"),t=td();
+if(!CON)return;
+const sH=P==="him"||V!=="tracker",sS=P==="her"||V!=="tracker";
+const ar=P==="him"?"#E07A5F":"#7B68AE",ag=P==="him"?"#E8A98E":"#A594D0";
+
+if(!S.startDate){
+el.innerHTML=`<div class="setup-wrap"><div class="setup-box">
+<div class="stitle">75 HARD</div><div class="ssub">A couples challenge.<br>No modifications. No excuses.</div>
+<div class="scard"><div style="font-size:13px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Start Date</div>
+<input type="date" id="startInput" class="sinp">
+<button onclick="cS()" class="sbtn">COMMIT TO 75 DAYS</button></div>
+<div class="sftr">📡 Shared — both phones see the same data.</div></div></div>`;return}
+
+const dn=dN(S.startDate,t),cD=Math.max(1,Math.min(75,dn)),eD=aD(S.startDate,74),vD=SD||t,vN=dN(S.startDate,vD);
+const ck=gC(vD,P),str=cStr(P),tot=cTot(P),hT=cTot("him"),sT=cTot("her"),hS=cStr("him"),sS2=cStr("her");
+const dc=isD(ck),nM=MS.find(m=>m>tot)||75;
+const stxt=dn>=1&&dn<=75?`Day ${cD} of 75`:dn>75?"COMPLETE":`Starts ${sM(S.startDate)}`;
+
+let h=`<div class="hdr"><div><h1>75 HARD</h1><div class="hdr-sub">${stxt}</div></div>
+<div style="display:flex;align-items:center;gap:6px"><span style="font-size:10px;color:var(--faint)">synced</span><div style="width:8px;height:8px;border-radius:50%;background:var(--success)"></div></div></div>
+<div class="ctr">`;
+
+// ═══ TRACKER ═══
+if(V==="tracker"){
+h+=`<div class="ptog"><button class="pbtn ${P==='him'?'ah':''}" onclick="sP('him')">🙋‍♂️ Him</button><button class="pbtn ${P==='her'?'as':''}" onclick="sP('her')">🙋‍♀️ Her</button></div>`;
+h+=`<div class="stabs"><button class="stab ${SV==='today'?'act':''}" onclick="sSV('today')">Today</button><button class="stab ${SV==='calendar'?'act':''}" onclick="sSV('calendar')">Calendar</button><button class="stab ${SV==='stats'?'act':''}" onclick="sSV('stats')">Stats</button></div>`;
+
+if(SV==="today"||SD){
+h+=`<div class="sban"><div><div class="snum" style="color:${ar}">${str}</div><div class="slbl">Streak</div></div><div class="sdiv"></div><div><div class="snum">${tot}</div><div class="slbl">Done</div></div><div class="sdiv"></div><div><div class="snum" style="color:var(--success)">${75-tot}</div><div class="slbl">Left</div></div></div>`;
+h+=`<div class="dhdr"><div><div class="dttl">${SD?'Day '+vN:'Day '+cD}</div><div class="dsub">${sD(vD)}, ${sM(vD)}</div></div>${SD?'<button class="bbtn" onclick="cSD()">← Today</button>':''}${dc?'<div class="dcbdg">✅ COMPLETE</div>':''}</div>`;
+TASKS.forEach(tk=>{const d=ck[tk.key];h+=`<button class="tbtn" style="background:${d?ar+'18':'var(--surface)'};border-color:${d?ar+'60':'var(--border)'}" onclick="tT('${vD}','${P}','${tk.key}')"><div class="tbox" style="background:${d?ar:'var(--border)'};color:${d?'white':'inherit'}">${d?'✓':tk.icon}</div><div><div class="ttl" style="color:${d?ar:'var(--text)'}">${tk.label}</div><div class="tdsc">${tk.desc}</div></div></button>`});
+const pc=Math.round((tot/75)*100);
+h+=`<div class="card" style="margin-top:16px"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px">Progress</span><span style="font-size:11px;color:var(--muted);font-weight:700">${pc}%</span></div><div class="ptrk"><div class="pfil" style="width:${pc}%;background:linear-gradient(90deg,${ar},${ag})"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px"><span style="font-size:10px;color:var(--faint)">Day 1</span><span style="font-size:10px;color:var(--faint)">Next: Day ${nM}</span><span style="font-size:10px;color:var(--faint)">Day 75</span></div></div>`;
+}
+
+if(SV==="calendar"&&!SD){
+h+=`<div class="section-title">75 DAY CALENDAR</div><div class="cgrd">`;
+["S","M","T","W","T","F","S"].forEach(d=>{h+=`<div class="chdr">${d}</div>`});
+const pad=new Date(S.startDate+"T12:00:00").getDay();
+for(let i=0;i<pad;i++)h+='<div></div>';
+for(let i=0;i<75;i++){const ds=aD(S.startDate,i),cm=isD(gC(ds,P)),iF=ds>t,iT=ds===t,pt=!cm&&Object.values(gC(ds,P)).some(Boolean);
+h+=`<button class="cday" style="background:${cm?ar:pt?ar+'40':iF?'var(--bg)':'var(--surface)'};color:${cm?'white':iF?'var(--void)':'var(--muted)'};border:${iT?`2px solid ${ar}`:'1px solid var(--surface)'};cursor:${iF?'default':'pointer'}${iF?';opacity:.4':''}" ${iF?'':`onclick="sSD('${ds}')"`}>${i+1}</button>`}
+h+=`</div><div style="display:flex;gap:16px;justify-content:center;margin-bottom:16px">
+<div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:4px;background:${ar}"></div><span style="font-size:10px;color:var(--dim)">Done</span></div>
+<div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:4px;background:${ar}50"></div><span style="font-size:10px;color:var(--dim)">Partial</span></div>
+<div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:4px;background:var(--surface)"></div><span style="font-size:10px;color:var(--dim)">Missed</span></div>
+</div><div class="card" style="text-align:center"><div style="font-size:12px;color:var(--dim);margin-bottom:4px">Challenge Period</div><div style="font-size:15px;font-weight:700">${sM(S.startDate)} → ${sM(eD)}</div></div>`}
+
+if(SV==="stats"){
+h+=`<div class="section-title">STATS</div><div class="cmpr">`;
+[{w:"him",l:"🙋‍♂️ Him",s:hS,tt:hT,c:"#E07A5F"},{w:"her",l:"🙋‍♀️ Her",s:sS2,tt:sT,c:"#7B68AE"}].forEach(p=>{
+h+=`<div class="card cmprc"><div style="font-size:13px;font-weight:700;color:${p.c};margin-bottom:12px">${p.l}</div><div style="font-family:var(--fd);font-size:40px;color:${p.c}">${p.tt}</div><div class="slbl" style="margin-bottom:12px">Days Done</div><div class="btrk"><div class="bfil" style="width:${(p.tt/75)*100}%;background:${p.c}"></div></div><div class="mstats"><div><div class="msnum">${p.s}</div><div class="mslbl">Streak</div></div><div><div class="msnum">${75-p.tt}</div><div class="mslbl">Left</div></div><div><div class="msnum">${Math.round((p.tt/75)*100)}%</div><div class="mslbl">Done</div></div></div></div>`});
+h+='</div>';
+const mx=Math.min(75,Math.max(0,dn));
+h+=`<div class="card"><div class="clbl">${P==='him'?'His':'Her'} Tasks</div>`;
+TASKS.forEach(tk=>{let d2=0;for(let i=0;i<mx;i++)if(gC(aD(S.startDate,i),P)[tk.key])d2++;const p2=mx>0?Math.round(d2/mx*100):0;
+h+=`<div class="bdr"><div class="bdhdr"><span class="bdlbl">${tk.icon} ${tk.label}</span><span class="bdpct">${p2}%</span></div><div class="bdtrk"><div class="bdfil" style="width:${p2}%;background:${ar}"></div></div></div>`});
+h+='</div><div class="card"><div class="clbl">Milestones</div><div class="mils">';
+MS.forEach(m=>{const r=tot>=m;h+=`<div class="mil" style="${r?`color:${ar};border-color:${ar};background:${ar}18`:''}">${r?'✓ ':''}Day ${m}</div>`});
+h+='</div></div><button class="rbtn" onclick="rC()">Reset Challenge</button>'}
+}
+
+// ═══ MEALS ═══
+if(V==="meals"){
+h+=`<div class="ptog"><button class="pbtn ${P==='him'?'ah':''}" onclick="sP('him')">🙋‍♂️ Him</button><button class="pbtn ${P==='her'?'as':''}" onclick="sP('her')">🙋‍♀️ Her</button></div>`;
+h+=`<div class="stabs"><button class="stab ${SV==='targets'?'act':''}" onclick="sSV('targets')">Targets</button><button class="stab ${SV==='week'?'act':''}" onclick="sSV('week')">Week Plan</button><button class="stab ${SV==='recipes'?'act':''}" onclick="sSV('recipes')">Recipes</button></div>`;
+
+if(SV==="targets"){
+h+=`<div class="tip-card"><div class="tip-title">⚡ DASH Setup</div><div class="tip-text"><strong>Him:</strong> 2,400–2,600 cal/day. Higher on run days, lower on yoga/rest.<br><strong>Her:</strong> 1,600–1,800 cal/day. Steady target with Peloton program.</div></div>`;
+h+=`<div class="section-title">Daily Serving Targets</div>`;
+const tgts=P==="him"?TARGETS_HIM:TARGETS_HER;
+tgts.forEach((tg,i)=>{
+const ot=P==="him"?TARGETS_HER[i]:TARGETS_HIM[i];
+h+=`<div class="tgt-row"><span class="tgt-icon">${tg.i}</span><div class="tgt-info"><div class="tgt-grp">${tg.g}</div><div class="tgt-note">${tg.n}</div></div><div class="tgt-val" style="color:${ar};background:${ar}15">${tg.s}</div></div>`});
+}
+
+if(SV==="week"){
+h+=`<div class="day-row">${WEEK.map((d,i)=>`<button class="dbtn ${MD===i?'act':''}" onclick="sMD(${i})">${d.day.slice(0,3)}</button>`).join('')}</div>`;
+h+=`<div class="section-title">${WEEK[MD].day}</div>`;
+Object.entries(WEEK[MD].meals).forEach(([ml,info])=>{
+h+=`<div class="meal-card"><div class="meal-type">${ml}</div><div class="meal-name">${info.n}</div>
+<div class="meal-cals"><span style="color:var(--him);font-weight:600">🙋‍♂️ ${info.h} cal</span><span style="color:var(--her);font-weight:600">🙋‍♀️ ${info.s} cal</span></div>
+<div class="meal-her">✨ Her: ${info.sn}</div><div class="meal-prep">⏱ ${info.p}</div></div>`});
+const hTot=Object.values(WEEK[MD].meals).reduce((s,m)=>s+m.h,0);
+const sTot=Object.values(WEEK[MD].meals).reduce((s,m)=>s+m.s,0);
+h+=`<div class="card" style="text-align:center"><div style="font-size:12px;color:var(--dim);margin-bottom:8px">Daily Totals</div><div style="display:flex;justify-content:center;gap:24px"><div><div style="font-family:var(--fd);font-size:28px;color:var(--him)">${hTot}</div><div style="font-size:10px;color:var(--dim)">Him</div></div><div><div style="font-family:var(--fd);font-size:28px;color:var(--her)">${sTot}</div><div style="font-size:10px;color:var(--dim)">Her</div></div></div></div>`}
+
+if(SV==="recipes"){
+h+=`<div class="filter-row">${["All","Breakfast","Lunch","Dinner","Meal Prep"].map(f=>`<button class="fbtn ${MF===f?'act':''}" onclick="sMF('${f}')">${f}</button>`).join('')}</div>`;
+const fr=MF==="All"?RECIPES:RECIPES.filter(r=>r.tg.includes(MF));
+fr.forEach(r=>{const ex=ER===r.id;
+h+=`<div class="recipe-card" onclick="sER(${r.id})"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1"><div style="font-size:15px;font-weight:700;margin-bottom:6px">${r.nm}</div><div class="r-tags">${r.tg.map(t=>`<span class="r-tag">${t}</span>`).join('')}</div><div class="r-meta">⏱ ${r.tm} · Serves ${r.sv}</div><div class="r-cals"><span style="color:var(--him);font-weight:600">🙋‍♂️ ${r.ch} cal</span><span style="color:var(--her);font-weight:600">🙋‍♀️ ${r.cs} cal</span></div></div><span style="font-size:16px;color:var(--dim);transform:${ex?'rotate(180deg)':'none'};transition:transform .2s">▼</span></div>`;
+if(ex){h+=`<div class="r-expand" onclick="event.stopPropagation()"><div class="r-portion">✨ <strong>Portions:</strong> ${r.pn}</div><div style="font-size:12px;font-weight:700;margin-bottom:8px">Ingredients</div>`;
+r.ig.forEach(ig=>{h+=`<div class="r-ing">${ig}</div>`});
+h+=`<div style="font-size:12px;font-weight:700;margin:14px 0 8px">Steps</div>`;
+r.st.forEach((s,i)=>{h+=`<div class="r-step"><span class="r-snum">${i+1}.</span><span>${s}</span></div>`});
+h+='</div>'}
+h+='</div>'})}}
+
+// ═══ PREP ═══
+if(V==="prep"){
+h+=`<div class="tip-card"><div class="tip-title">🗓 Sunday Couples Prep</div><div class="tip-text">About <strong>3 hours together</strong>. Each task has a split. Put on music — this is your weekly ritual.</div></div>`;
+h+=`<div class="section-title">Prep Checklist</div>`;
+PREP.forEach((p,i)=>{h+=`<div class="prep-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1"><div style="font-size:14px;font-weight:700;margin-bottom:6px">${i+1}. ${p.t}</div><div style="font-size:12px;color:var(--dim);line-height:1.5;margin-bottom:8px">${p.d}</div><div class="prep-who">👫 ${p.w}</div></div><div class="prep-time">${p.tm}</div></div></div>`});
+h+=`<div class="card"><div class="clbl">🛒 Weekly Groceries</div><div class="grocery-section">
+<strong>Proteins:</strong> 3 lbs chicken, 2 lbs turkey, salmon (6+4 oz), eggs + whites, cod<br>
+<strong>Grains:</strong> Oats, quinoa, brown rice, WW pasta, bread, rolls<br>
+<strong>Produce:</strong> Spinach, broccoli, peppers, onions, garlic, tomatoes, cucumbers, sweet potatoes, lemons, limes, bananas, berries, apples, pears, carrots, celery, romaine, mushrooms<br>
+<strong>Pantry:</strong> No-salt beans + tomatoes, lentils, low-sodium broth, olive oil, chia seeds, dates<br>
+<strong>Dairy:</strong> Fat-free milk, Greek yogurt, low-fat feta + cottage cheese, string cheese<br>
+<strong>His extras:</strong> Almonds, walnuts, PB, granola, honey, extra bananas<br>
+<strong>Her extras:</strong> Edamame, hummus, extra fruit
+</div></div>`}
+
+// ═══ SNACKS ═══
+if(V==="snacks"){
+h+=`<div class="tip-card" style="background:rgba(123,104,174,0.1);border-color:rgba(123,104,174,0.3)"><div class="tip-title" style="color:var(--her)">🍏 Her Snack Guide</div><div class="tip-text">At 1,600–1,800 cal, she has <strong>200–250 cal for snacks</strong> daily. Pick 1–2. Best 30–60 min before Peloton.</div></div>`;
+h+=`<div class="section-title">Snack Options</div>`;
+SNACKS.forEach(s=>{h+=`<div class="snack-card"><div style="flex:1"><div class="snack-name">${s.n}</div><div class="snack-dash">DASH: ${s.d}</div></div><div style="text-align:right"><div class="snack-cal">${s.c}</div><div class="snack-unit">cal</div></div></div>`});
+h+=`<div class="tip-card"><div class="tip-title">💡 Timing</div><div class="tip-text">Mid-morning and mid-afternoon. A snack 30–60 min before Peloton fuels the ride. On yoga days, skip afternoon snack if not hungry.</div></div>`}
+
+// Bottom Nav
+h+=`</div><div class="bnav">
+<button class="${V==='tracker'?'act':''}" onclick="sV('tracker')"><span>🔥</span>Track</button>
+<button class="${V==='meals'?'act':''}" onclick="sV('meals');sSV('targets')"><span>🍽</span>Meals</button>
+<button class="${V==='prep'?'act':''}" onclick="sV('prep')"><span>🔪</span>Prep</button>
+<button class="${V==='snacks'?'act':''}" onclick="sV('snacks')"><span>🍏</span>Snacks</button>
+</div>`;
+
+el.innerHTML=h}
+</script>
+</body>
+</html>
