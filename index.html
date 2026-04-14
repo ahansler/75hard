@@ -191,7 +191,8 @@ onAuthStateChanged(auth,user=>{
     signOut(auth);
     showLogin("Sorry, this app is only for Adam & Brooke.");
   } else {
-    currentUser=null;CON=false;
+    if(unsubDB){unsubDB();unsubDB=null;}
+    currentUser=null;CON=false;dataRef=null;
     showLogin();
   }
 });
